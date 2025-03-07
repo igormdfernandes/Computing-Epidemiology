@@ -1,59 +1,51 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import matplotlib.colors as mcolors
+from scipy.ndimage import convolve
 
-# Estados das células
-VAZIO, MICROBIO, OBSTACULO, MORTO, RESISTENTE = 0, 1, 2, 3, 4
-
-# Parâmetros principais
-TAMANHO_GRADE = 50
-PASSOS = 50
-PROB_CRESCIMENTO = 0.3
+TAMANHO_DOMINIO = 100
+TEMPO_TOTAL = 50
+PASSOS_TEMPO = 100
+DIFUSAO_BACTERIA = 0.1
+DIFUSAO_ANTIBIOTICO = 0.2
+TAXA_CRESCIMENTO = 0.3
+CAPACIDADE_SUPORTE = 1.0
 TAXA_MORTALIDADE = 0.1
+DECAIMENTO_ANTIBIOTICO = 0.05
 PROB_RESISTENCIA = 0.05
-EFICACIA_ANTIBIOTICO = 0.8
 
-# Inicialização da grade
-ambiente = np.zeros((TAMANHO_GRADE, TAMANHO_GRADE), dtype=int)
+kernel = np.array([[0, 1, 0],
+                   [1, -4, 1],
+                   [0, 1, 0]])
 
-# Posições iniciais das bactérias
-for _ in range(5):
-    linha, coluna = np.random.randint(0, TAMANHO_GRADE, size=2)
-    ambiente[linha, coluna] = MICROBIO
+bacteria = np.zeros((TAMANHO_DOMINIO, TAMANHO_DOMINIO))
+antibiotico = np.zeros((TAMANHO_DOMINIO, TAMANHO_DOMINIO))
+resistente = np.zeros((TAMANHO_DOMINIO, TAMANHO_DOMINIO))
 
-# Inserindo barreiras aleatórias
-for _ in range(3):
-    linha, coluna = np.random.randint(0, TAMANHO_GRADE, size=2)
-    ambiente[max(0, linha-2):min(TAMANHO_GRADE, linha+2), max(0, coluna-2):min(TAMANHO_GRADE, coluna+2)] = OBSTACULO
+bacteria[TAMANHO_DOMINIO//2, TAMANHO_DOMINIO//2] = 0.5
+antibiotico[TAMANHO_DOMINIO//4, TAMANHO_DOMINIO//4] = 1.0
 
-def atualizar(_):
-    global ambiente
-    nova_grade = ambiente.copy()
+def atualizar_sistema(bacteria, antibiotico, resistente):
+    bacteria += DIFUSAO_BACTERIA * convolve(bacteria, kernel, mode='reflect')
+    antibiotico += DIFUSAO_ANTIBIOTICO * convolve(antibiotico, kernel, mode='reflect')   
+    bacteria += TAXA_CRESCIMENTO * bacteria * (1 - bacteria / CAPACIDADE_SUPORTE)  
+    morte = TAXA_MORTALIDADE * antibiotico * bacteria
+    bacteria -= morte
+    resistente += PROB_RESISTENCIA * morte
+    antibiotico -= DECAIMENTO_ANTIBIOTICO * antibiotico
+    bacteria = np.clip(bacteria, 0, CAPACIDADE_SUPORTE)
+    antibiotico = np.clip(antibiotico, 0, 1.0)
+    resistente = np.clip(resistente, 0, CAPACIDADE_SUPORTE)
     
-    for linha in range(1, TAMANHO_GRADE - 1):
-        for coluna in range(1, TAMANHO_GRADE - 1):
-            if ambiente[linha, coluna] == VAZIO:
-                # Crescimento bacteriano baseado em vizinhança
-                vizinhos = [ambiente[linha-1, coluna], ambiente[linha+1, coluna], ambiente[linha, coluna-1], ambiente[linha, coluna+1]]
-                if MICROBIO in vizinhos and np.random.rand() < PROB_CRESCIMENTO:
-                    nova_grade[linha, coluna] = MICROBIO
-            elif ambiente[linha, coluna] == MICROBIO:
-                # Mortalidade e resistência
-                if np.random.rand() < TAXA_MORTALIDADE:
-                    nova_grade[linha, coluna] = RESISTENTE if np.random.rand() < PROB_RESISTENCIA else MORTO
-                elif np.random.rand() < EFICACIA_ANTIBIOTICO:
-                    nova_grade[linha, coluna] = MORTO
-    
-    ambiente[:] = nova_grade
-    matriz.set_data(ambiente)
-    return [matriz]
+    return bacteria, antibiotico, resistente
 
-# Configuração visual
-mapa_cores = mcolors.ListedColormap(["white", "green", "gray", "red", "blue"])
-norma = mcolors.BoundaryNorm([0, 1, 2, 3, 4, 5], mapa_cores.N)
+plt.figure()
+for passo in range(PASSOS_TEMPO):
+    bacteria, antibiotico, resistente = atualizar_sistema(bacteria, antibiotico, resistente)
+    if passo % 10 == 0:
+        plt.clf()
+        plt.imshow(bacteria + resistente, cmap='viridis', vmin=0, vmax=CAPACIDADE_SUPORTE)
+        plt.colorbar(label='Densidade Bacteriana')
+        plt.title(f"Tempo: {passo}")
+        plt.pause(0.1)
 
-figura, eixo = plt.subplots()
-matriz = eixo.matshow(ambiente, cmap=mapa_cores, norm=norma)
-animacao = animation.FuncAnimation(figura, atualizar, frames=PASSOS, interval=200, blit=True)
 plt.show()

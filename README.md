@@ -1,66 +1,46 @@
-# Modelagem Computacional do Crescimento Bacteriano
+# Computational Modeling of Bacterial Growth Using PDEs
 
-Este repositório apresenta um modelo baseado em autômatos celulares para simular a dinâmica do crescimento bacteriano sob diferentes condições ambientais. A simulação permite explorar os impactos da administração de antibacterianos, limitação de nutrientes e barreiras físicas, além de investigar o surgimento de resistência microbiana.
+This repository presents a mathematical model based on Partial Differential Equations (PDEs) to simulate bacterial growth, antibiotic effects, and resistance development. The model provides a continuous framework for understanding bacterial dynamics and can be used to explore infection control strategies.
 
-## Objetivos
+## Objectives
+The proposed modeling allows:
 
-A modelagem proposta permite:
+- Analyzing bacterial population dynamics over time and space.
+- Simulating the effects of antibiotic administration on bacterial mortality.
+- Investigating the emergence of antibiotic resistance.
+- Studying the impact of environmental constraints on bacterial growth.
 
-Analisar padrões de crescimento de colônias bacterianas ao longo do tempo.
+## Theoretical Foundation
+The model is based on reaction-diffusion equations, which describe how bacterial density and antibiotic concentration change over time and space. Key references include:
 
-Simular efeitos de restrições ambientais na proliferação de microrganismos.
+- Murray, J. D. (2003). Mathematical Biology.
+- Edelstein-Keshet, L. (2005). Mathematical Models in Biology.
+- Turing, A. M. (1952). The Chemical Basis of Morphogenesis.
 
-Estudar a eficiência do uso de antibacterianos no controle das populações microbianas.
+## Model Structure
+The model consists of three main components:
 
-Investigar o desenvolvimento de resistência a antibióticos em um sistema simulado.
+1. **Bacterial Density**: Described by a diffusion term and a logistic growth term.
+2. **Antibiotic Concentration**: Diffuses through the environment and kills bacteria.
+3. **Resistance Development**: A fraction of bacteria exposed to antibiotics develop resistance.
 
-Avaliar o impacto de barreiras físicas no controle do crescimento bacteriano.
+## Running the Simulation
+### 1. Cloning the Repository
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/Computing-Epidemiology.git
+   ```
 
-## Fundamentação Teórica
+### 2. Environment Configuration
+Ensure you have Python installed. Install the necessary dependencies with:
 
-A modelagem do crescimento microbiano baseia-se em princípios de dinâmica populacional e interação ambiental. O modelo se inspira nos conceitos apresentados por autores como:
+pip install numpy matplotlib scipy
 
-Murray, J. D. (2003). Mathematical Biology.
-
-Nowak, M. A., & May, R. M. (2000). Virus Dynamics: Mathematical Principles of Immunology and Virology.
-
-Edelstein-Keshet, L. (2005). Mathematical Models in Biology.
-
-## Estrutura da Simulação
-
-O modelo opera em um espaço discreto onde cada célula representa uma região do meio de cultura. A evolução do sistema segue regras de transição baseadas em interações locais e disponibilidade de recursos.
-
-As principais variáveis da simulação incluem:
-
-Taxa de crescimento bacteriano: Depende da disponibilidade de nutrientes e espaço.
-
-Efeito de antibacterianos: Influencia a taxa de mortalidade e resistência.
-
-Barreiras físicas: Limitam a propagação das colônias.
-
-Mutabilidade: Possibilita o surgimento de variantes resistentes.
-
-# Executando a Simulação
-
-## 1 **Clonando o Repositório**
-```bash
-git clone https://github.com/YOUR-USERNAME/Computing-Epidemiology.git
-```
-
-## 2. Configuração do Ambiente
-
-Certifique-se de ter o Python instalado. Instale as dependências necessárias com:
-
-pip install numpy matplotlib
-
-## 3. Rodando o Modelo
-
-Execute o script principal:
+### 3. Running the Model
+Execute the main script:
 
 python main.py
 
-Isso gerará visualizações gráficas da evolução do crescimento bacteriano.
+This will generate a dynamic visualization of bacterial growth and antibiotic effects.
 
-## Considerações Científicas
-
-Este modelo computacional permite explorar mecanismos fundamentais de resistência e disseminação bacteriana. Os resultados podem ser utilizados para compreender a dinâmica epidemiológica e o impacto de estratégias de controle de infecções.
+## Scientific Considerations
+This model provides a continuous and scalable framework for studying bacterial dynamics. It can be extended to include additional factors such as immune responses, nutrient availability, and multi-drug resistance.
