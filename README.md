@@ -64,11 +64,3 @@ Isso gerará visualizações gráficas da evolução do crescimento bacteriano.
 ## Considerações Científicas
 
 Este modelo computacional permite explorar mecanismos fundamentais de resistência e disseminação bacteriana. Os resultados podem ser utilizados para compreender a dinâmica epidemiológica e o impacto de estratégias de controle de infecções.
-
-## Referências
-
-Murray, J. D. (2003). Mathematical Biology. Springer.
-
-Nowak, M. A., & May, R. M. (2000). Virus Dynamics: Mathematical Principles of Immunology and Virology. Oxford University Press.
-
-Edelstein-Keshet, L. (2005). Mathematical Models in Biology. SIAM.
