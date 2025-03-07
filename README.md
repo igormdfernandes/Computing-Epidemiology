@@ -61,18 +61,6 @@ python main.py
 
 Isso gerará visualizações gráficas da evolução do crescimento bacteriano.
 
-## Saídas da Simulação
-
-Os seguintes arquivos são gerados:
-
-distribuicao_inicial.png: Representação inicial da cultura bacteriana.
-
-crescimento_temporal.png: Evolução da população ao longo das iterações.
-
-efeito_antibiotico.png: Comparativo entre o crescimento com e sem antibióticos.
-
-resistencia_mutacao.png: Demonstra a emergência de linhagens resistentes.
-
 ## Considerações Científicas
 
 Este modelo computacional permite explorar mecanismos fundamentais de resistência e disseminação bacteriana. Os resultados podem ser utilizados para compreender a dinâmica epidemiológica e o impacto de estratégias de controle de infecções.
